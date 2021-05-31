@@ -55,7 +55,7 @@ export function HomeContainer({
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const loaded = get(reposData, 'items', null) || reposError;
+    const loaded = get(reposData, 'results', null) || reposError;
     if (loading && loaded) {
       setLoading(false);
     }
@@ -81,8 +81,8 @@ export function HomeContainer({
   const debouncedHandleOnChange = debounce(handleOnChange, 200);
 
   const renderRepoList = () => {
-    const items = get(reposData, 'items', []);
-    const totalCount = get(reposData, 'totalCount', 0);
+    const items = get(reposData, 'results', []);
+    const totalCount = get(reposData, 'resultCount', 0);
     return (
       (items.length !== 0 || loading) && (
         <CustomCard>
@@ -99,9 +99,8 @@ export function HomeContainer({
             )}
             {items.map((item, index) => (
               <CustomCard key={index}>
-                <T id="repository_name" values={{ name: item.name }} />
-                <T id="repository_full_name" values={{ fullName: item.fullName }} />
-                <T id="repository_stars" values={{ stars: item.stargazersCount }} />
+                <T id="repository_name" values={{ name: item.artistName }} />
+                <T id="repository_full_name" values={{ fullName: item.trackName }} />
               </CustomCard>
             ))}
           </Skeleton>
@@ -113,7 +112,7 @@ export function HomeContainer({
     let repoError;
     if (reposError) {
       repoError = reposError;
-    } else if (!get(reposData, 'totalCount', 0)) {
+    } else if (!get(reposData, 'resultCount', 0)) {
       repoError = 'respo_search_default';
     }
     return (
@@ -131,10 +130,7 @@ export function HomeContainer({
   };
   return (
     <Container maxwidth={maxwidth} padding={padding}>
-      <RightContent>
-        <Clickable textId="stories" onClick={refreshPage} />
-      </RightContent>
-      <CustomCard title={intl.formatMessage({ id: 'repo_search' })} maxwidth={maxwidth}>
+      <CustomCard title={intl.formatMessage({ id: 'artist_search' })} maxwidth={maxwidth}>
         <T marginBottom={10} id="get_repo_details" />
         <Search
           data-testid="search-bar"
